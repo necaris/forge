@@ -649,6 +649,16 @@
            `((organization . ,fork))))
     (ghub-wait (format "/repos/%s/%s" fork name) nil :auth 'forge)))
 
+(cl-defmethod forge--merge-pullreq ((repo forge-github-repository) n)
+  ;; https://docs.github.com/en/free-pro-team@latest/rest/reference/pulls#merge-a-pull-request
+  (with-slots (owner name) repo
+    (forge--ghub-put repo
+      (format "/repos/%s/%s/pulls/%s/merge" owner name n)
+      ;; `((sha . ,)
+      ;;   (merge-method . ,)
+      ;;   (commit-title . ,))
+      )))
+
 ;;; Utilities
 
 (cl-defun forge--ghub-get (obj resource

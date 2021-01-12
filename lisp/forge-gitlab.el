@@ -540,6 +540,17 @@
     (ghub-wait (format "/projects/%s%%2F%s" fork name)
                nil :auth 'forge :forge 'gitlab)))
 
+
+(cl-defmethod forge--merge-pullreq ((repo forge-github-repository) n)
+  ;; https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
+  (with-slots (owner name) repo
+    (forge--ghub-put repo
+      (format "/projects/%s%%2F%s/merge_requests/%s/merge"
+              owner name n) ; FIXME n?
+      ;; `((sha . ,))
+      )))
+
+
 ;;; Utilities
 
 (cl-defmethod forge--topic-type-prefix ((_repo forge-gitlab-repository) type)
